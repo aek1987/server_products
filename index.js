@@ -14,6 +14,8 @@ app.use(express.static('public')); // si vous avez des fichiers statiques
 app.use(express.json());
 // Route pour obtenir tous les produits
 // Route pour obtenir tous les produits
+// Route pour obtenir tous les produits
+// Route pour obtenir tous les produits
 app.get('/api/products', (req, res) => {
   fs.readFile(dbPath, 'utf8', (err, data) => {
     if (err) {
