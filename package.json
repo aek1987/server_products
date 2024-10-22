@@ -1,16 +1,17 @@
 {
-  "name": "my-json-server",
+  "name": "vercel-json-server",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "json-server --watch db.json --port 3000"
+    "start": "node index.js"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "json-server": "^1.0.0-beta.3",
-    "send": "^0.19.0"
-=======
-    "json-server": "^0.17.0"
->>>>>>> 8d5f7caea471a05bd601fbc6e0e454982fe93e18
-  }
+    "express": "^4.21.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
