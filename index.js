@@ -1,33 +1,49 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
 const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Connexion à la base de données SQLite
-const dbPath = path.resolve(__dirname, 'base.db');
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error('Erreur lors de la connexion à la base de données', err);
-  } else {
-    console.log('Connecté à la base de données SQLite');
-  }
-});
+// Chemin vers le fichier db.json
+const dbPath = path.resolve(__dirname, 'db.json');
+
+// Middleware pour servir les fichiers statiques
+app.use(express.static('public')); // si vous avez des fichiers statiques
 
 // Route pour obtenir tous les produits
 app.get('/api/products', (req, res) => {
-  const query = 'SELECT * FROM products';  // Remplace "products" par le nom de ta table
-  db.all(query, [], (err, rows) => {
+  fs.readFile(dbPath, 'utf8', (err, data) => {
     if (err) {
-      res.status(500).json({ error: err.message });
-      return;
+      return res.status(500).json({ error: 'Erreur lors de la lecture du fichier' });
     }
-    res.json(rows);
+    const jsonData = JSON.parse(data);
+    res.json(jsonData.products); // Renvoie la liste des produits
   });
 });
 
 // Démarrer le serveur
 app.listen(port, () => {
   console.log(`Serveur démarré sur le port ${port}`);
+});
+
+// Route pour ajouter un nouveau produit
+app.post('/api/products', (req, res) => {
+  const newProduct = req.body; // Assurez-vous d'envoyer le corps de la requête au format JSON
+  fs.readFile(dbPath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Erreur lors de la lecture du fichier' });
+    }
+    const jsonData = JSON.parse(data);
+    // Ajoutez un nouvel ID
+    newProduct.id = (jsonData.products.length + 1).toString();
+    jsonData.products.push(newProduct);
+    
+    fs.writeFile(dbPath, JSON.stringify(jsonData, null, 2), (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Erreur lors de l\'écriture du fichier' });
+      }
+      res.status(201).json(newProduct); // Renvoie le nouveau produit
+    });
+  });
 });
