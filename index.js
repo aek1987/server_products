@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 const dbPath = path.resolve(__dirname, 'db.json');
 
 // Middleware pour servir les fichiers statiques
-app.use(express.static('public')); // si vous avez des fichiers statiques
+//app.use(express.static('public')); // si vous avez des fichiers statiques
 // Middleware pour analyser les requêtes JSON
 app.use(express.json());
 // Route pour obtenir tous les produits
