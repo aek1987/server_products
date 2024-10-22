@@ -13,7 +13,8 @@ const dbPath = path.resolve(__dirname, 'db.json');
 // Middleware pour analyser les requêtes JSON
 app.use(express.json());
 // Route pour obtenir tous les produits
-// Route pour obtenir tous les produits
+const cors = require('cors');
+app.use(cors()); // Active CORS pour toutes les routes
 // Route pour obtenir tous les produits
 // Route pour obtenir tous les produits
 app.get('/api/products', (req, res) => {

@@ -43,7 +43,7 @@
     {
       "id": "6",
       "name": "Oppo A74",
-      "price":45000,
+      "price": 45000,
       "description": "Oppo A74, smartphone milieu de gamme avec 128 Go de stockage et batterie 5000 mAh.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Oppo"
@@ -171,11 +171,18 @@
     {
       "id": "21",
       "name": "ITEL A70",
-      "price": 20.900,
+      "price": 20.9,
       "description": "ITEL A70 12GB 256GB.",
       "image": "assets/ItelA70.jpg",
       "category": "Xiaomi"
+    },
+    {
+      "name": "Nouveau Produit",
+      "price": 199.99,
+      "description": "Description du nouveau produit",
+      "image": "assets/nouveau_produit.jpg",
+      "category": "Nouvelle Catégorie",
+      "id": "23"
     }
-   
   ]
 }
