@@ -110,7 +110,7 @@
       "price": 17999,
       "description": "Realme Narzo 30 avec écran 90Hz et batterie 5000 mAh.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
-      "category": "Realme"
+      "category": "realme"
     },
     {
       "id": "15",
@@ -150,7 +150,7 @@
       "price": 17800,
       "description": "Realme C25 avec batterie 6000 mAh et processeur Helio G70.",
       "image": "assets/Realme-C25.jpg",
-      "category": "Realme"
+      "category": "realme"
     },
     {
       "id": "20",
