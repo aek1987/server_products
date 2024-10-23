@@ -19,7 +19,7 @@
     {
       "id": "3",
       "name": "Apple iPhone 13",
-      "price": 1099.99,
+      "price": 109999,
       "description": "Apple iPhone 13 avec écran OLED 6,1 pouces et puce A15 Bionic.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Apple"
@@ -27,7 +27,7 @@
     {
       "id": "4",
       "name": "Apple iPhone SE",
-      "price": 429.99,
+      "price": 42999,
       "description": "Apple iPhone SE, modèle compact avec Touch ID et puce A13 Bionic.",
       "image": "assets//Samsung_Galaxy_S21.jpg",
       "category": "Apple"
@@ -35,7 +35,7 @@
     {
       "id": "5",
       "name": "Oppo Find X3 Pro",
-      "price": 849.99,
+      "price": 84999,
       "description": "Oppo Find X3 Pro avec écran 120Hz AMOLED et caméra 50 MP.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Oppo"
@@ -51,7 +51,7 @@
     {
       "id": "7",
       "name": "Realme GT 5G",
-      "price": 599.99,
+      "price": 59999,
       "description": "Realme GT 5G avec écran Super AMOLED, Snapdragon 888, et 16 Go de RAM.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "realme"
@@ -59,7 +59,7 @@
     {
       "id": "8",
       "name": "Realme 8 Pro",
-      "price": 299.99,
+      "price": 29999,
       "description": "Realme 8 Pro, smartphone avec caméra 108 MP et écran 6,4 pouces Super AMOLED.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "realme"
@@ -67,7 +67,7 @@
     {
       "id": "9",
       "name": "Xiaomi Mi 11",
-      "price": 799.99,
+      "price": 79999,
       "description": "Xiaomi Mi 11 avec Snapdragon 888 et écran 120Hz AMOLED.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Xiaomi"
@@ -75,7 +75,7 @@
     {
       "id": "10",
       "name": "Xiaomi Redmi Note 10",
-      "price": 199.99,
+      "price": 19999,
       "description": "Xiaomi Redmi Note 10, smartphone abordable avec écran AMOLED et caméra 48 MP.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Xiaomi"
@@ -83,7 +83,7 @@
     {
       "id": "11",
       "name": "Samsung Galaxy Z Fold 3",
-      "price": 1799.99,
+      "price": 179999,
       "description": "Samsung Galaxy Z Fold 3, téléphone pliable avec écran 7,6 pouces.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Samsung"
@@ -91,7 +91,7 @@
     {
       "id": "12",
       "name": "Apple iPhone 12 Mini",
-      "price": 699.99,
+      "price": 69999,
       "description": "Apple iPhone 12 Mini, modèle compact avec écran OLED 5,4 pouces.",
       "image": "assets/iphone-12-mini.jpg",
       "category": "Apple"
@@ -107,7 +107,7 @@
     {
       "id": "14",
       "name": "Realme Narzo 30",
-      "price": 179.99,
+      "price": 17999,
       "description": "Realme Narzo 30 avec écran 90Hz et batterie 5000 mAh.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Realme"
@@ -115,7 +115,7 @@
     {
       "id": "15",
       "name": "Xiaomi Poco X3 Pro",
-      "price": 249.99,
+      "price": 24999,
       "description": "Xiaomi Poco X3 Pro avec Snapdragon 860 et écran 120Hz.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Xiaomi"
@@ -123,7 +123,7 @@
     {
       "id": "16",
       "name": "Samsung Galaxy M32",
-      "price": 249.99,
+      "price": 24999,
       "description": "Samsung Galaxy M32 avec écran 90Hz Super AMOLED et batterie 6000 mAh.",
       "image": "assets//Samsung_Galaxy_S21.jpg",
       "category": "Samsung"
@@ -131,7 +131,7 @@
     {
       "id": "17",
       "name": "Apple iPhone 11",
-      "price": 599.99,
+      "price":60000,
       "description": "Apple iPhone 11, modèle avec double caméra et écran LCD Liquid Retina.",
       "image": "assets//Samsung_Galaxy_S21.jpg",
       "category": "Apple"
@@ -139,7 +139,7 @@
     {
       "id": "18",
       "name": "Oppo A15s",
-      "price": 159.99,
+      "price": 15999,
       "description": "Oppo A15s, smartphone économique avec 4 Go de RAM et 64 Go de stockage.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Oppo"
@@ -147,7 +147,7 @@
     {
       "id": "19",
       "name": "Realme C25",
-      "price": 179.99,
+      "price": 17999,
       "description": "Realme C25 avec batterie 6000 mAh et processeur Helio G70.",
       "image": "assets/Realme-C25.jpg",
       "category": "Realme"
@@ -155,7 +155,7 @@
     {
       "id": "20",
       "name": "Xiaomi Mi 10T",
-      "price": 449.99,
+      "price": 44999,
       "description": "Xiaomi Mi 10T avec écran 144Hz et Snapdragon 865.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Xiaomi"
@@ -163,7 +163,7 @@
     {
       "id": "20",
       "name": "Xiaomi Mi 10T",
-      "price": 449.99,
+      "price": 52000,
       "description": "Xiaomi Mi 10T avec écran 144Hz et Snapdragon 865.",
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Xiaomi"
@@ -171,7 +171,7 @@
     {
       "id": "21",
       "name": "ITEL A70",
-      "price": 20.9,
+      "price": 20900,
       "description": "ITEL A70 12GB 256GB.",
       "image": "assets/ItelA70.jpg",
       "category": "Xiaomi"
