@@ -1,10 +1,10 @@
 class Customer {
-    constructor(id, name, email, address, phone) {
+    constructor(id, name,phone,  wilaya, commune ,address ) {
         this.id = id;
         this.name = name;
         this.phone = phone;
-        this.wilyaya = address;
-        this.commune = address;
+        this.wilaya = wilaya;
+        this.commune = commune;
         this.address = address;   
     }
 }

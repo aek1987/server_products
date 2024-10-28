@@ -28,9 +28,9 @@ db.serialize(() => {
     image TEXT,
     category TEXT
 )`);
-    db.run(`CREATE TABLE IF NOT EXISTS orders (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        customerId INTEGER,
+   db.run(`CREATE TABLE IF NOT EXISTS orders (
+        id INTEGER ,
+        customerId INTEGER PRIMARY KEY AUTOINCREMENT,
         totalPrice REAL,
         status TEXT,
         orderDate TEXT,
@@ -39,11 +39,13 @@ db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS customers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
-        email TEXT,
-        address TEXT,
-        phone TEXT
+        phone TEX,
+        wilaya TEXT,
+        commune TEXT,
+        address text
+        
     )`);
-    db.run(`CREATE TABLE order_items (
+    db.run(`CREATE TABLE IF NOT EXISTS order_items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,   -- Identifiant unique de la ligne
     orderId INTEGER,                         -- Référence à l'ID de la commande
     productId INTEGER,                       -- Référence à l'ID du produit
@@ -132,42 +134,71 @@ app.get('/api/products/:id', (req, res) => {
       res.json(row);
   });
 });
+
+
+
+
+
+
+// Route pour obtenir tous les produits
+app.get('/api/allorders', (req, res) => {
+    console.log("Requête pour tous les produits reçue");
+      db.all('SELECT * FROM orders', [], (err, rows) => {
+          if (err) {
+              return res.status(500).json({ error: 'Erreur lors de la récupération des produits' });
+          }
+          res.json(rows);
+      });
+  });
 /********* */
 // Route pour ajouter une nouvelle commande
+// Insertion des informations du client
 app.post('/api/orders', (req, res) => {
-  const { customerId, totalPrice, status, orderDate, panier } = req.body; // Assurez-vous que le corps de la requête contient ces champs
+    const { name, phone, wilaya, commune, address, totalPrice, status, orderDate, panier } = req.body;
 
-  // Vérification de la présence des données requises
-  if (!customerId || !totalPrice || !status || !orderDate || !Array.isArray(panier)) {
-      return res.status(400).json({ error: 'Données manquantes' });
-  }
+    if (!name || !phone || !wilaya || !commune || !address || !totalPrice || !status || !orderDate || !panier) {
+        return res.status(400).json({ error: 'Données manquantes' });
+    }
 
-  // Insertion de la commande
-  db.run(`INSERT INTO orders (customerId, totalPrice, status, orderDate) VALUES (?, ?, ?, ?)`,
-      [customerId, totalPrice, status, orderDate],
-      function(err) {
-          if (err) {
-              return res.status(500).json({ error: 'Erreur lors de l\'ajout de la commande' });
-          }
+    // Insérer le client
+    db.run(`INSERT INTO customers (name, phone, wilaya, commune, address) VALUES (?, ?, ?, ?, ?)`,    
+        [name, phone, wilaya, commune, address],
+        function(err) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: 'Erreur lors de l\'ajout du client' });
+            }
 
-          const orderId = this.lastID; // ID de la commande nouvellement créée
+            const customerId = this.lastID; // ID du client nouvellement créé
 
-          // Insérer les éléments du panier dans une table séparée si nécessaire
-          const insertPanierStmt = db.prepare('INSERT INTO order_items (orderId, productId, quantity) VALUES (?, ?, ?)');
+            // Insérer la commande
+            db.run(`INSERT INTO orders (customerId, totalPrice, status, orderDate) VALUES (?, ?, ?, ?)`,
+                [customerId, totalPrice, status, orderDate],
+                function(err) {
+                    if (err) {
+                        return res.status(500).json({ error: 'Erreur lors de l\'ajout de la commande' });
+                    }
 
-          panier.forEach(item => {
-              insertPanierStmt.run(orderId, item.product.id, item.quantity, (err) => {
-                  if (err) {
-                      console.error('Erreur lors de l\'insertion du produit dans le panier:', err);
-                  }
-              });
-          });
+                    const orderId = this.lastID; // ID de la commande nouvellement créée
 
-          insertPanierStmt.finalize(); // Finaliser la déclaration préparée
+                    // Insérer les éléments du panier dans une table séparée
+                    const insertPanierStmt = db.prepare('INSERT INTO order_items (orderId, productId, quantity) VALUES (?, ?, ?)');
+                    panier.forEach(item => {
+                        insertPanierStmt.run(orderId, item.product.id, item.quantity, (err) => {
+                            if (err) {
+                                console.error('Erreur lors de l\'insertion du produit dans le panier:', err);
+                            }
+                        });
+                    });
 
-          res.status(201).json({ orderId, message: 'Commande ajoutée avec succès' });
-      });
+                    insertPanierStmt.finalize();
+                    res.status(201).json({ orderId, message: 'Commande ajoutée avec succès' });
+                }
+            );
+        }
+    );
 });
+
 
 // Démarrer le serveur
 app.listen(port, () => {
