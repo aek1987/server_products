@@ -3,9 +3,13 @@
   "version": "2.0.0",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npm ci && npm rebuild sqlite3 --build-from-source --unsafe-perm",
+    "postinstall": "npm rebuild sqlite3 --build-from-source --unsafe-perm",
     "start": "node index.js"
   },
+  "engines": {
+  "node": "20.x"
+   }
+,
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.1",
