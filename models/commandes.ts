@@ -6,7 +6,7 @@ class Order {
         this.totalPrice = totalPrice;
         this.status = status;
         this.orderDate = orderDate;
-        this.panier = panier; // Utilisation de 'panier' pour stocker la liste des produits
+        this.panier = panier; // Utilisation de 'panier' pour stocker la liste des sproduits //
     }
 }
 
