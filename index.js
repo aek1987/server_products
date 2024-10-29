@@ -154,11 +154,24 @@ app.get('/api/allorders', (req, res) => {
 // Route pour ajouter une nouvelle commande
 // Insertion des informations du client
 app.post('/api/orders', (req, res) => {
+     console.log("Requête pour une nouvelle commande");
     const { name, phone, wilaya, commune, address, totalPrice, status, orderDate, panier } = req.body;
 
     if (!name || !phone || !wilaya || !commune || !address || !totalPrice || !status || !orderDate || !panier) {
-        return res.status(400).json({ error: 'Données manquantes' });
-    }
+      const missingFields = [];
+      if (!name) missingFields.push('name');
+      if (!phone) missingFields.push('phone');
+      if (!wilaya) missingFields.push('wilaya');
+      if (!commune) missingFields.push('commune');
+      if (!address) missingFields.push('address');
+      if (!totalPrice) missingFields.push('totalPrice');
+      if (!status) missingFields.push('status');
+      if (!orderDate) missingFields.push('orderDate');
+      if (!panier) missingFields.push('panier');
+      
+      return res.status(400).json({ error: 'Données manquantes: ' + missingFields.join(', ') });
+  }
+  
 
     // Insérer le client
     db.run(`INSERT INTO customers (name, phone, wilaya, commune, address) VALUES (?, ?, ?, ?, ?)`,    
