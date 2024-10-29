@@ -135,12 +135,36 @@ app.get('/api/products/:id', (req, res) => {
   });
 });
 
+app.get('/api/produit_commandes/:id', (req, res) => {
+    const orderId = req.params.id;
+    console.log(`ID du produit commande: ${orderId}`);
+  
+    db.get('SELECT * FROM order_items WHERE orderId = ?', orderId, (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erreur lors de la récupération du comande' });
+        }
+        if (!row) {
+            return res.status(404).json({ error: 'comande non trouvé' });
+        }
+        res.json(row);
+    });
+  });
 
 
 
 
+// Route pour obtenir tous les custumers
+app.get('/api/client', (req, res) => {
+    console.log("Requête pour tous les produits reçue");
+      db.all('SELECT * FROM customers', [], (err, rows) => {
+          if (err) {
+              return res.status(500).json({ error: 'Erreur lors de la récupération des produits' });
+          }
+          res.json(rows);
+      });
+  });
 
-// Route pour obtenir tous les produits
+// Route pour obtenir tous les commande
 app.get('/api/allorders', (req, res) => {
     console.log("Requête pour tous les produits reçue");
       db.all('SELECT * FROM orders', [], (err, rows) => {
