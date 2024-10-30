@@ -24,6 +24,20 @@ export const addOrder = (req, res) => {
         return res.status(400).json({ error: 'Données manquantes' });
     }
 
+
+    db.get('SELECT * FROM customers WHERE phone = ?', [phone], (err, customer) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erreur lors de la recherche du client' });
+        }
+
+        if (customer) {
+            // Si le client existe, utiliser son ID pour la commande
+            const customerId = customer.id;
+            saveOrder(customerId);
+        } else {
+
+
+
     // Insérer le client
     db.run(`INSERT INTO customers (name, phone, wilaya, commune, address) VALUES (?, ?, ?, ?, ?)`,    
         [name, phone, wilaya, commune, address],
@@ -50,8 +64,13 @@ export const addOrder = (req, res) => {
                     res.status(201).json({ orderId, message: 'Commande Commande validée avec succès' });
                 });
         });
-};
+};///  le client n'existe pas
+    }
 
+)
+
+}
+    
 
 // Route pour obtenir une commande par ID
 export const getOrderItemsById = (req, res) => {
@@ -66,4 +85,9 @@ export const getOrderItemsById = (req, res) => {
         }
         res.json(rows);
     });
+
+
+  
+
+
 };
