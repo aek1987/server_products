@@ -30,7 +30,7 @@ export const getproductorder = (req, res) => {
 // Obtenir un les commande client par id 
 export const getorderCustemuer = (req, res) => {
     const customerid = req.params.id;
-    db.get('SELECT * FROM orders  WHERE customerId = ?', customerid, (err, row) => {
+    db.all('SELECT * FROM orders  WHERE customerId = ?', customerid, (err, row) => {
         if (err) {
             return res.status(500).json({ error: 'Erreur lors de la récupération du comande par id' });
         }
