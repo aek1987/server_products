@@ -45,18 +45,16 @@ export const addOrder = (req, res) => {
                         return res.status(500).json({ error: 'Erreur lors de l\'ajout du client' });
                     }
 
-<<<<<<< HEAD
-                    const orderId = this.lastID;
+                   const orderId = this.lastID;
                     const insertPanierStmt = db.prepare('INSERT INTO order_items (orderId, productId, quantity) VALUES (?, ?, ?)');
                     panier.forEach(item => {
                         insertPanierStmt.run(orderId, item.product.id, item.quantity);
                     });
                     insertPanierStmt.finalize();
                     res.status(201).json({ orderId, message: 'Commande Commande validée avec succès',commandevalide:'ok' });
-=======
                     const customerId = this.lastID;
                     saveOrder(customerId); // Appeler la fonction pour sauvegarder la commande après avoir ajouté le client
->>>>>>> ff0b8adac5d36561e93430f4ad5016ec7f998aff
+
                 });
         }
     });
