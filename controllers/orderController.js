@@ -47,7 +47,7 @@ export const addOrder = (req, res) => {
                         insertPanierStmt.run(orderId, item.product.id, item.quantity);
                     });
                     insertPanierStmt.finalize();
-                    res.status(201).json({ orderId, message: 'Commande Commande validée avec succès' });
+                    res.status(201).json({ orderId, message: 'Commande Commande validée avec succès',commandevalide:'ok' });
                 });
         });
 };
