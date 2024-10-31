@@ -51,7 +51,7 @@ export const addOrder = (req, res) => {
                         insertPanierStmt.run(orderId, item.product.id, item.quantity);
                     });
                     insertPanierStmt.finalize();
-                    res.status(201).json({ orderId, message: 'Commande Commande validée avec succès',commandestate:'succes' });
+                    res.status(201).json({ orderId, message: 'Commande Commande validée avec succès' });
                     const customerId = this.lastID;
                     saveOrder(customerId); // Appeler la fonction pour sauvegarder la commande après avoir ajouté le client
 
@@ -77,7 +77,7 @@ export const addOrder = (req, res) => {
                 });
                 insertPanierStmt.finalize();
                 
-                res.status(201).json({ orderId, message: 'Commande validée avec succès',rep:"succes" });
+                res.status(201).json({ orderId, message: 'Commande validée avec succès',commandestate:'succes' });
             });
     }
 };
