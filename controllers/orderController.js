@@ -17,6 +17,7 @@ export const getAllOrders = (req, res) => {
 
 // Ajouter une commande
 
+// Ajouter une commande
 export const addOrder = (req, res) => {
     const { name, phone, wilaya, commune, address, totalPrice, status, orderDate, panier } = req.body;
 
@@ -24,23 +25,27 @@ export const addOrder = (req, res) => {
         return res.status(400).json({ error: 'Données manquantes' });
     }
 
-    // Insérer le client
-    db.run(`INSERT INTO customers (name, phone, wilaya, commune, address) VALUES (?, ?, ?, ?, ?)`,    
-        [name, phone, wilaya, commune, address],
-        function(err) {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ error: 'Erreur lors de l\'ajout du client' });
-            }
+    // Vérifier si le client existe déjà par numéro de téléphone
+    db.get('SELECT * FROM customers WHERE phone = ?', [phone], (err, customer) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erreur lors de la recherche du client' });
+        }
 
-            const customerId = this.lastID;
-            db.run(`INSERT INTO orders (customerId, totalPrice, status, orderDate) VALUES (?, ?, ?, ?)`,
-                [customerId, totalPrice, status, orderDate],
+        if (customer) {
+            // Si le client existe, utiliser son ID pour enregistrer la commande
+            const customerId = customer.id;
+            saveOrder(customerId);
+        } else {
+            // Si le client n'existe pas, créer un nouveau client
+            db.run(`INSERT INTO customers (name, phone, wilaya, commune, address) VALUES (?, ?, ?, ?, ?)`,
+                [name, phone, wilaya, commune, address],
                 function(err) {
                     if (err) {
-                        return res.status(500).json({ error: 'Erreur lors de l\'ajout de la commande' });
+                        console.error(err);
+                        return res.status(500).json({ error: 'Erreur lors de l\'ajout du client' });
                     }
 
+<<<<<<< HEAD
                     const orderId = this.lastID;
                     const insertPanierStmt = db.prepare('INSERT INTO order_items (orderId, productId, quantity) VALUES (?, ?, ?)');
                     panier.forEach(item => {
@@ -48,10 +53,38 @@ export const addOrder = (req, res) => {
                     });
                     insertPanierStmt.finalize();
                     res.status(201).json({ orderId, message: 'Commande Commande validée avec succès',commandevalide:'ok' });
+=======
+                    const customerId = this.lastID;
+                    saveOrder(customerId); // Appeler la fonction pour sauvegarder la commande après avoir ajouté le client
+>>>>>>> ff0b8adac5d36561e93430f4ad5016ec7f998aff
                 });
-        });
+        }
+    });
+
+    // Fonction pour sauvegarder la commande
+    function saveOrder(customerId) {
+        db.run(`INSERT INTO orders (customerId, totalPrice, status, orderDate) VALUES (?, ?, ?, ?)`,
+            [customerId, totalPrice, status, orderDate],
+            function(err) {
+                if (err) {
+                    return res.status(500).json({ error: 'Erreur lors de l\'ajout de la commande' });
+                }
+
+                const orderId = this.lastID;
+                const insertPanierStmt = db.prepare('INSERT INTO order_items (orderId, productId, quantity) VALUES (?, ?, ?)');
+                
+                // Insérer les produits du panier
+                panier.forEach(item => {
+                    insertPanierStmt.run(orderId, item.product.id, item.quantity);
+                });
+                insertPanierStmt.finalize();
+                
+                res.status(201).json({ orderId, message: 'Commande validée avec succès',rep:"succes" });
+            });
+    }
 };
 
+    
 
 // Route pour obtenir une commande par ID
 export const getOrderItemsById = (req, res) => {
@@ -66,4 +99,9 @@ export const getOrderItemsById = (req, res) => {
         }
         res.json(rows);
     });
+
+
+  
+
+
 };
