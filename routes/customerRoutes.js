@@ -7,5 +7,5 @@ router.get('/clientstel/:phone', customersControler.gettCustomerByTel);
 router.get('/clients', customersControler.getAllCustumers);
 router.get('/clients/:id', customersControler.getcustomerById); 
 router.get('/commande_client/:id', customersControler.getorderCustemuer);//tous les comande client
-router.get('/products_commande/:id', customersControler.getproductorder);// tous les produit de cliennt
+router.get('/products_commande/:id', customersControler.getproductorder);// tous les produit d un commande
 export default router; // Exportation par défaut du routeur

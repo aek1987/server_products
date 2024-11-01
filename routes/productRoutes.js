@@ -7,10 +7,10 @@ const router = express.Router();
 router.get('/allproducts', productController.getAllProducts);
 
 // Route pour ajouter un nouveau produit
-router.post('/addproduct', productController.addProduct);
+router.post('/product', productController.addProduct);
 
 // Route pour supprimer un produit
-router.delete('/deleteproduct/:id', productController.deleteProduct);
+router.delete('/product/:id', productController.deleteProduct);
 
 // Route pour obtenir un produit spécifique par ID
 router.get('/product/:id', productController.getProductById);

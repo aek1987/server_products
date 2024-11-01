@@ -13,9 +13,9 @@ export const getAllProducts = (req, res) => {
 
 // Ajouter un nouveau produit
 export const addProduct = (req, res) => {
-    const { name, description, price, image, category } = req.body; // Assurez-vous que ces champs existent
-    db.run('INSERT INTO products (name, description, price, image, category) VALUES (?, ?, ?, ?, ?)', 
-        [name, description, price, image, category], function (err) {
+    const { name, description, price, image, category ,resolution,storage,ram,battery,wirelessCharging,color, dualSim } = req.body; // Assurez-vous que ces champs existent
+    db.run('INSERT INTO products (name, description, price, image, category,resolution,storage,ram, battery, wirelessCharging,color,dualSim) VALUES ( ?,?,?,?, ?, ?, ?,?, ?, ?, ?,?)', 
+        [ name, description, price, image, category ,resolution,storage,ram,battery,wirelessCharging,color, dualSim], function (err) {
         if (err) {
             res.status(500).json({ error: err.message });
         } else {

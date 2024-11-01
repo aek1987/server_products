@@ -15,7 +15,16 @@ db.serialize(() => {
         description TEXT,
         price REAL NOT NULL,
         image TEXT,
-        category TEXT
+        category TEXT,
+        resolution TEXT,
+        storage TEXT,
+        ram   EXT,
+        battery TEXT,
+        wirelessCharging TEXT,
+        color TEXT,
+        dualSim false
+
+
     )`);
 
     db.run(`CREATE TABLE IF NOT EXISTS orders (
@@ -49,25 +58,25 @@ db.serialize(() => {
 
 
 // Insérer les produits depuis le fichier JSON si la table est vide
- /*   fs.readFile(dbPath, 'utf8', (err, data) => {
-  if (err) {
-      console.error('Erreur lors de la lecture du fichier JSON', err);
-      return;  }
-  
-  const jsonData = JSON.parse(data);
-  const insertStmt = db.prepare('INSERT INTO products (id, name, description, price, image, category) VALUES (?, ?, ?, ?, ?, ?)');
+/*   fs.readFile(dbPath, 'utf8', (err, data) => {
+ if (err) {
+     console.error('Erreur lors de la lecture du fichier JSON', err);
+     return;  }
+ 
+ const jsonData = JSON.parse(data);
+ const insertStmt = db.prepare('INSERT INTO products (id, name, description, price, image, category) VALUES (?, ?, ?, ?, ?, ?)');
 
-  jsonData.products.forEach(product => {
-      insertStmt.run(product.id, product.name, product.description, product.price, product.image, product.category, function(err) {
-          if (err) {
-              console.error('Erreur lors de l\'insertion du produit:', err);
-          } else {
-             console.log(`Produit ajouté avec succès: ${product.name}`);
-          }
-      });
-  });
+ jsonData.products.forEach(product => {
+     insertStmt.run(product.id, product.name, product.description, product.price, product.image, product.category, function(err) {
+         if (err) {
+             console.error('Erreur lors de l\'insertion du produit:', err);
+         } else {
+            console.log(`Produit ajouté avec succès: ${product.name}`);
+         }
+     });
+ });
 
-  insertStmt.finalize(); // Finaliser la déclaration préparée
+ insertStmt.finalize(); // Finaliser la déclaration préparée
 });
 */
 
