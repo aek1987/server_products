@@ -82,7 +82,7 @@ export const addOrder = (req, res) => {
     }
 };
 
-    
+          
 
 // Route pour obtenir une commande par ID
 export const getOrderItemsById = (req, res) => {
@@ -97,9 +97,39 @@ export const getOrderItemsById = (req, res) => {
         }
         res.json(rows);
     });
+}
 
 
+
+
+ 
+export const deleteOrder = (req, res) => {
+    const OrderId = req.params.id;
+    db.run('DELETE FROM orders WHERE id = ?', OrderId, function(err) {
+        if (err) {
+            return res.status(500).json({ error: 'Erreur lors de la suppression du orders' });
+            
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'orders non trouvé id =' + OrderId });
+        }
+        res.status(204).send(); // Produit supprimé
+    });
+};
+
+export const deleteOrderItems = (req, res) => {
   
-
-
+    const OrderId = req.params.id;
+    db.run('DELETE FROM order_items WHERE orderId = ?', OrderId, function(err) {
+        
+        if (err) {
+            return res.status(500).json({ error: 'Erreur lors de la suppression du orders items' });
+        }
+        if (this.changes === 0) {
+            console.Console( res)
+        }
+            return res.status(404).json({ error: 'orders non trouvé id =' + OrderId });
+            
+        res.status(204).send(); // Produit supprimé
+    });
 };
