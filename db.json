@@ -160,14 +160,7 @@
       "image": "assets/Samsung_Galaxy_S21.jpg",
       "category": "Xiaomi"
     },
-    {
-      "id": "21",
-      "name": "Xiaomi Mi 10T",
-      "price": 52000,
-      "description": "Xiaomi Mi 10T avec écran 144Hz et Snapdragon 865.",
-      "image": "assets/Samsung_Galaxy_S21.jpg",
-      "category": "Xiaomi"
-    },
+   
     {
       "id": "22",
       "name": "ITEL A70",
