@@ -1,0 +1,25 @@
+# Node modules
+node_modules/
+
+# Fichiers log
+*.log
+
+# Dossier de build pour un projet Angular
+/dist/
+/build/
+
+# Fichiers de configuration locaux
+*.env
+.env.local
+
+# Cache et dossiers temporaires
+/.cache
+/npm-debug.log
+
+# Fichiers de IDE et éditeurs
+.vscode/
+.idea/
+
+# Dossier de dépendances locales ou autres fichiers spécifiques
+/package-lock.json
+/yarn.lock

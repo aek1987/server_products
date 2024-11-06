@@ -1,83 +1,96 @@
-import sqlite3 from 'sqlite3';
-const db = new sqlite3.Database('db/database.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+import { Client } from 'pg';
+
+const client = new Client({
+    connectionString: process.env.DATABASE_URL, // URL de connexion PostgreSQL, à définir dans les variables d'environnement
+    ssl: { rejectUnauthorized: false }
+});
+
+// Connexion à PostgreSQL
+client.connect((err) => {
     if (err) {
-        console.error('Erreur lors de l\'ouverture de la base de données', err);
+        console.error('Erreur lors de la connexion à la base de données PostgreSQL', err);
     } else {
-        console.log('Base de données ouverte avec succès');
+        console.log('Base de données PostgreSQL connectée avec succès');
     }
 });
 
 // Création des tables
-db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        description TEXT,
-        price REAL NOT NULL,
-        image TEXT,
-        category TEXT,
-        resolution TEXT,
-        storage TEXT,
-        ram   EXT,
-        battery TEXT,
-        wirelessCharging TEXT,
-        color TEXT,
-        dualSim false
+const createTables = async () => {
+    try {
+        await client.query(`CREATE TABLE IF NOT EXISTS products (
+            id SERIAL PRIMARY KEY,
+            name TEXT NOT NULL,
+            description TEXT,
+            price REAL NOT NULL,
+            image TEXT,
+            category TEXT,
+            resolution TEXT,
+            storage TEXT,
+            ram TEXT,
+            battery TEXT,
+            wirelessCharging TEXT,
+            color TEXT,
+            dualSim BOOLEAN DEFAULT FALSE
+        )`);
 
+        await client.query(`CREATE TABLE IF NOT EXISTS orders (
+            id SERIAL PRIMARY KEY,
+            customerId INTEGER,
+            totalPrice REAL,
+            status TEXT,
+            orderDate TEXT,
+            FOREIGN KEY (customerId) REFERENCES customers(id)
+        )`);
 
-    )`);
+        await client.query(`CREATE TABLE IF NOT EXISTS customers (
+            id SERIAL PRIMARY KEY,
+            name TEXT,
+            phone TEXT,
+            wilaya TEXT,
+            commune TEXT,
+            address TEXT
+        )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS orders (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        customerId INTEGER,
-        totalPrice REAL,
-        status TEXT,
-        orderDate TEXT,
-        FOREIGN KEY(customerId) REFERENCES customers(id)
-    )`);
+        await client.query(`CREATE TABLE IF NOT EXISTS order_items (
+            id SERIAL PRIMARY KEY,
+            orderId INTEGER,
+            productId INTEGER,
+            quantity INTEGER NOT NULL,
+            FOREIGN KEY (orderId) REFERENCES orders(id),
+            FOREIGN KEY (productId) REFERENCES products(id)
+        )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS customers (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        phone TEXT,
-        wilaya TEXT,
-        commune TEXT,
-        address TEXT
-    )`);
+        console.log("Tables créées avec succès dans PostgreSQL");
+    } catch (error) {
+        console.error("Erreur lors de la création des tables", error);
+    }
+};
 
-    db.run(`CREATE TABLE IF NOT EXISTS order_items (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        orderId INTEGER,
-        productId INTEGER,
-        quantity INTEGER NOT NULL,
-        FOREIGN KEY (orderId) REFERENCES orders(id),
-        FOREIGN KEY (productId) REFERENCES products(id)
-    )`);
-});
+// Appel de la fonction pour créer les tables
+createTables();
 
+// Fonction pour insérer des produits depuis un fichier JSON (décommenter et adapter si besoin)
+/*
+import fs from 'fs';
 
+const insertProductsFromJSON = async (jsonFilePath) => {
+    const data = fs.readFileSync(jsonFilePath, 'utf8');
+    const jsonData = JSON.parse(data);
 
-// Insérer les produits depuis le fichier JSON si la table est vide
-/*   fs.readFile(dbPath, 'utf8', (err, data) => {
- if (err) {
-     console.error('Erreur lors de la lecture du fichier JSON', err);
-     return;  }
- 
- const jsonData = JSON.parse(data);
- const insertStmt = db.prepare('INSERT INTO products (id, name, description, price, image, category) VALUES (?, ?, ?, ?, ?, ?)');
-
- jsonData.products.forEach(product => {
-     insertStmt.run(product.id, product.name, product.description, product.price, product.image, product.category, function(err) {
-         if (err) {
-             console.error('Erreur lors de l\'insertion du produit:', err);
-         } else {
+    for (const product of jsonData.products) {
+        try {
+            await client.query(
+                'INSERT INTO products (name, description, price, image, category, resolution, storage, ram, battery, wirelessCharging, color, dualSim) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
+                [product.name, product.description, product.price, product.image, product.category, product.resolution, product.storage, product.ram, product.battery, product.wirelessCharging, product.color, product.dualSim]
+            );
             console.log(`Produit ajouté avec succès: ${product.name}`);
-         }
-     });
- });
+        } catch (error) {
+            console.error('Erreur lors de l\'insertion du produit:', error);
+        }
+    }
+};
 
- insertStmt.finalize(); // Finaliser la déclaration préparée
-});
+// Exemple d'utilisation : insertProductsFromJSON('chemin/vers/votre/fichier.json');
 */
 
-export default db;
+export default client;

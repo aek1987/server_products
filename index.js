@@ -22,6 +22,10 @@ app.use('/api', orderRoutes);
 app.use('/api', productRoutes);
 app.use('/api', customerRoutes);
 
+
+import dotenv from 'dotenv';
+dotenv.config();
+
 // Démarrer le serveur
 app.listen(port, () => {
     console.log(`Serveur démarré sur le port ${port}`);
