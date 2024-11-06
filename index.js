@@ -23,8 +23,6 @@ app.use('/api', productRoutes);
 app.use('/api', customerRoutes);
 
 
-import dotenv from 'dotenv';
-dotenv.config();
 
 // Démarrer le serveur
 app.listen(port, () => {

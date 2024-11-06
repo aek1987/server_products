@@ -1,10 +1,21 @@
 import pkg from 'pg';
 const { Client } = pkg;
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 const client = new Client({
     connectionString: process.env.DATABASE_URL, // URL de connexion PostgreSQL, à définir dans les variables d'environnement
     ssl: { rejectUnauthorized: false }
 });
+
+// Vérifier si la variable d'environnement est correctement lue
+if (!process.env.DATABASE_URL) {
+    console.error("DATABASE_URL n'est pas définie dans les variables d'environnement.");
+} else {
+    console.log("DATABASE_URL est lue avec succès.");
+}
+
 
 // Connexion à PostgreSQL avec async/await
 const connectToDatabase = async () => {
@@ -79,7 +90,7 @@ initializeDatabase();
 
 // Exemple d'insertion de produits à partir d'un fichier JSON (si besoin)
 import fs from 'fs';
-
+/*
 const insertProductsFromJSON = async (jsonFilePath) => {
     const data = fs.readFileSync(jsonFilePath, 'utf8');
     const jsonData = JSON.parse(data);
@@ -96,7 +107,7 @@ const insertProductsFromJSON = async (jsonFilePath) => {
         }
     }
 };
-
+*/
 // Exemple d'utilisation : insertProductsFromJSON('chemin/vers/votre/fichier.json');
 
 // Assurez-vous de fermer la connexion après les opérations (par exemple à la fin de l'application)

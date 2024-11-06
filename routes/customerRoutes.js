@@ -3,10 +3,12 @@ import * as customersControler from '../controllers/customersControler.js'; // U
 
 const router = express.Router();
 
-router.get('/clientstel/:phone', customersControler.gettCustomerByTel);
-router.get('/clients', customersControler.getAllCustumers);
-router.get('/clients/:id', customersControler.getcustomerById); 
-router.get('/commande_client/:id', customersControler.getorderCustemuer);//tous les comande client
+router.get('/clientstel/:phone', customersControler.getCustomerByTel);
+router.get('/clients', customersControler.getAllCustomers);
+router.get('/clients/:id', customersControler.getCustomerById); 
+router.get('/commande_client/:id', customersControler.getOrderCustomer);//tous les comande client
 
-router.get('/products_commande/:id', customersControler.getproductorder);// tous les produit d un commande
+router.get('/products_commande/:id', customersControler.getProductOrder);// tous les produit d un commande
+
+
 export default router; // Exportation par défaut du routeur

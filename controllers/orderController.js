@@ -1,21 +1,15 @@
-// orderController.ts
-import db from '../db/database.js';
+// orderController.js
+import db from '../db/database.js';; // Le chemin d'accès à votre fichier database.ts
 
-
-
+// Récupérer toutes les commandes
 export const getAllOrders = (req, res) => {
-    db.all('SELECT * FROM orders', [], (err, rows) => {
+    db.query('SELECT * FROM orders', [], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Erreur lors de la récupération des commandes' });
         }
-        res.json(rows);
+        res.json(result.rows);  // Utilisation de `result.rows` avec PostgreSQL
     });
 };
-
-// Assurez-vous d'exporter toutes les méthodes que vous utilisez dans vos routes
-
-
-// Ajouter une commande
 
 // Ajouter une commande
 export const addOrder = (req, res) => {
@@ -26,10 +20,12 @@ export const addOrder = (req, res) => {
     }
 
     // Vérifier si le client existe déjà par numéro de téléphone
-    db.get('SELECT * FROM customers WHERE phone = ?', [phone], (err, customer) => {
+    db.query('SELECT * FROM customers WHERE phone = $1', [phone], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Erreur lors de la recherche du client' });
         }
+
+        const customer = result.rows[0];
 
         if (customer) {
             // Si le client existe, utiliser son ID pour enregistrer la commande
@@ -37,94 +33,90 @@ export const addOrder = (req, res) => {
             saveOrder(customerId);
         } else {
             // Si le client n'existe pas, créer un nouveau client
-            
-            db.run(`INSERT INTO customers (name, phone, wilaya, commune, address) VALUES (?, ?, ?, ?, ?)`,
+            db.query(
+                'INSERT INTO customers (name, phone, wilaya, commune, address) VALUES ($1, $2, $3, $4, $5) RETURNING id',
                 [name, phone, wilaya, commune, address],
-                function(err) {
+                (err, result) => {
                     if (err) {
                         console.error(err);
                         return res.status(500).json({ error: 'Erreur lors de l\'ajout du client' });
                     }
-                   const customerId = this.lastID;   
-                   saveOrder(customerId);             
-                                     
-                   
-
-                });
+                    const customerId = result.rows[0].id;
+                    saveOrder(customerId);
+                }
+            );
         }
     });
 
     // Fonction pour sauvegarder la commande
     function saveOrder(customerId) {
-        db.run(`INSERT INTO orders (customerId, totalPrice, status, orderDate) VALUES (?, ?, ?, ?)`,
+        db.query(
+            'INSERT INTO orders (customerId, totalPrice, status, orderDate) VALUES ($1, $2, $3, $4) RETURNING id',
             [customerId, totalPrice, status, orderDate],
-            function(err) {
+            (err, result) => {
                 if (err) {
                     return res.status(500).json({ error: 'Erreur lors de l\'ajout de la commande' });
                 }
 
-                const orderId = this.lastID;
-                const insertPanierStmt = db.prepare('INSERT INTO order_items (orderId, productId, quantity) VALUES (?, ?, ?)');
-                
-                // Insérer les produits du panier
+                const orderId = result.rows[0].id;
+
+                // Insertion des produits du panier dans la table 'order_items'
+                const insertPanierStmt = 'INSERT INTO order_items (orderId, productId, quantity) VALUES ($1, $2, $3)';
                 panier.forEach(item => {
-                    insertPanierStmt.run(orderId, item.product.id, item.quantity);
+                    db.query(insertPanierStmt, [orderId, item.product.id, item.quantity], (err) => {
+                        if (err) {
+                            console.error('Erreur lors de l\'ajout des articles dans la commande', err);
+                        }
+                    });
                 });
-                insertPanierStmt.finalize();
-                
-                res.status(201).json({ orderId, message: 'Commande validée avec succès',commandestate:'succes' });
-            });
+
+                res.status(201).json({ orderId, message: 'Commande validée avec succès' });
+            }
+        );
     }
 };
 
-          
-
-// Route pour obtenir une commande par ID
+// Récupérer les items d'une commande par ID
 export const getOrderItemsById = (req, res) => {
     const orderId = req.params.id;
-  
-    db.all('SELECT * FROM order_items WHERE orderId = ?', orderId, (err, rows) => {
+
+    db.query('SELECT * FROM order_items WHERE orderId = $1', [orderId], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Erreur lors de la récupération des items de commande' });
         }
-        if (rows.length === 0) {
+        if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Commande non trouvée' });
         }
-        res.json(rows);
-    });
-}
-
-
-
-
- 
-export const deleteOrder = (req, res) => {
-    const OrderId = req.params.id;
-    db.run('DELETE FROM orders WHERE id = ?', OrderId, function(err) {
-        if (err) {
-            return res.status(500).json({ error: 'Erreur lors de la suppression du orders' });
-            
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ error: 'orders non trouvé id =' + OrderId });
-        }
-        res.status(204).send(); // Produit supprimé
+        res.json(result.rows);  // Utilisation de `result.rows` avec PostgreSQL
     });
 };
 
-export const deleteOrderItems = (req, res) => {
-  
-    const OrderId = req.params.id;
-    db.run('DELETE FROM order_items WHERE orderId = ?', OrderId, function(err) {
-        
+// Suppression d'une commande
+export const deleteOrder = (req, res) => {
+    const orderId = req.params.id;
+
+    db.query('DELETE FROM orders WHERE id = $1', [orderId], (err, result) => {
         if (err) {
-            return res.status(500).json({ error: 'Erreur lors de la suppression du orders items' });
+            return res.status(500).json({ error: 'Erreur lors de la suppression de la commande' });
         }
-        if (this.changes === 0) {
-            console.Console( res)
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Commande non trouvée' });
         }
-            return res.status(404).json({ error: 'orders non trouvé id =' + OrderId });
-            
-        res.status(204).send(); // Produit supprimé
+        res.status(204).send();  // Commande supprimée
+    });
+};
+
+// Suppression des items d'une commande
+export const deleteOrderItems = (req, res) => {
+    const orderId = req.params.id;
+
+    db.query('DELETE FROM order_items WHERE orderId = $1', [orderId], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erreur lors de la suppression des items de la commande' });
+        }
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Items de la commande non trouvés' });
+        }
+        res.status(204).send();  // Items supprimés
     });
 };
