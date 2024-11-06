@@ -30,6 +30,14 @@ const connectToDatabase = async () => {
 // Création des tables avec async/await
 const createTables = async () => {
     try {
+        await client.query(`CREATE TABLE IF NOT EXISTS customers (
+            id SERIAL PRIMARY KEY,
+            name TEXT,
+            phone TEXT,
+            wilaya TEXT,
+            commune TEXT,
+            address TEXT
+        )`);
         await client.query(`CREATE TABLE IF NOT EXISTS products (
             id SERIAL PRIMARY KEY,
             name TEXT NOT NULL,
@@ -55,14 +63,7 @@ const createTables = async () => {
             FOREIGN KEY (customerId) REFERENCES customers(id)
         )`);
 
-        await client.query(`CREATE TABLE IF NOT EXISTS customers (
-            id SERIAL PRIMARY KEY,
-            name TEXT,
-            phone TEXT,
-            wilaya TEXT,
-            commune TEXT,
-            address TEXT
-        )`);
+    
 
         await client.query(`CREATE TABLE IF NOT EXISTS order_items (
             id SERIAL PRIMARY KEY,
@@ -111,6 +112,15 @@ const insertProductsFromJSON = async (jsonFilePath) => {
 // Exemple d'utilisation : insertProductsFromJSON('chemin/vers/votre/fichier.json');
 
 // Assurez-vous de fermer la connexion après les opérations (par exemple à la fin de l'application)
-client.end();
 
+
+// Fonction pour fermer la connexion proprement
+const closeDatabaseConnection = async () => {
+    try {
+        await client.end();
+        console.log("Connexion à la base de données PostgreSQL fermée proprement.");
+    } catch (error) {
+        console.error("Erreur lors de la fermeture de la connexion à la base de données", error);
+    }
+};
 export default client;
