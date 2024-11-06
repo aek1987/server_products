@@ -70,7 +70,7 @@ export const addOrder = (req, res) => {
                     });
                 });
 
-                res.status(201).json({ orderId, message: 'Commande validée avec succès' });
+                res.status(201).json({ orderId, message: 'Commande validée avec succès',commandestate:"succes"});
             }
         );
     }
