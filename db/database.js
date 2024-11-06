@@ -1,20 +1,22 @@
-import { Client } from 'pg';
+import pkg from 'pg';
+const { Client } = pkg;
 
 const client = new Client({
     connectionString: process.env.DATABASE_URL, // URL de connexion PostgreSQL, à définir dans les variables d'environnement
     ssl: { rejectUnauthorized: false }
 });
 
-// Connexion à PostgreSQL
-client.connect((err) => {
-    if (err) {
-        console.error('Erreur lors de la connexion à la base de données PostgreSQL', err);
-    } else {
+// Connexion à PostgreSQL avec async/await
+const connectToDatabase = async () => {
+    try {
+        await client.connect();
         console.log('Base de données PostgreSQL connectée avec succès');
+    } catch (err) {
+        console.error('Erreur lors de la connexion à la base de données PostgreSQL', err);
     }
-});
+};
 
-// Création des tables
+// Création des tables avec async/await
 const createTables = async () => {
     try {
         await client.query(`CREATE TABLE IF NOT EXISTS products (
@@ -66,11 +68,16 @@ const createTables = async () => {
     }
 };
 
-// Appel de la fonction pour créer les tables
-createTables();
+// Appel de la fonction pour établir la connexion et créer les tables
+const initializeDatabase = async () => {
+    await connectToDatabase();
+    await createTables();
+};
 
-// Fonction pour insérer des produits depuis un fichier JSON (décommenter et adapter si besoin)
-/*
+// Appel de la fonction d'initialisation
+initializeDatabase();
+
+// Exemple d'insertion de produits à partir d'un fichier JSON (si besoin)
 import fs from 'fs';
 
 const insertProductsFromJSON = async (jsonFilePath) => {
@@ -91,6 +98,8 @@ const insertProductsFromJSON = async (jsonFilePath) => {
 };
 
 // Exemple d'utilisation : insertProductsFromJSON('chemin/vers/votre/fichier.json');
-*/
+
+// Assurez-vous de fermer la connexion après les opérations (par exemple à la fin de l'application)
+client.end();
 
 export default client;
