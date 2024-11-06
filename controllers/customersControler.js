@@ -4,7 +4,7 @@ import db from '../db/database.js';; // Le chemin d'accès à votre fichier data
 
 // Récupérer tous les clients
 export const getAllCustomers = (req, res) => {
-    pool.query('SELECT * FROM customers', (err, result) => {
+    db.query('SELECT * FROM customers', (err, result) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -31,10 +31,10 @@ export const getOrderCustomer = (req, res) => {
     const customerId = req.params.id;
     db.query('SELECT * FROM orders WHERE customer_id = $1', [customerId], (err, result) => {
         if (err) {
-            return res.status(500).json({ error: 'Erreur lors de la récupération des commandes du client' });
+            return res.status(500).json({ error: 'Erreur lors de la récupération des commandes du client' })+err;
         }
         if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Commandes non trouvées pour ce client' });
+            return res.status(404).json({ error: 'aucun Commandes non trouvées pour ce client' });
         }
         res.json(result.rows);
     });
