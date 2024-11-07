@@ -15,7 +15,7 @@ export const getAllCustomers = (req, res) => {
 // Obtenir les produits de commande par ID de commande
 export const getProductOrder = (req, res) => {
     const orderId = req.params.id; // Utilisez 'orderId' pour plus de clarté
-    db.query('SELECT * FROM order_items WHERE order_id = $1', [orderId], (err, result) => { // Utilisez db.query pour récupérer plusieurs lignes
+    db.query('SELECT * FROM order_items WHERE  orderId = $1', [orderId], (err, result) => { // Utilisez db.query pour récupérer plusieurs lignes
         if (err) {
             return res.status(500).json({ error: 'Erreur lors de la récupération des articles de commande' });
         }
