@@ -27,11 +27,12 @@ export const getProductOrder = (req, res) => {
 };
 
 // Obtenir les commandes du client par ID
-export const getOrderCustomer = (req, res) => {
+export const getOrderCustomerID = (req, res) => {
     const customerId = req.params.id;
-    db.query('SELECT * FROM orders WHERE customer_id = $1', [customerId], (err, result) => {
+    db.query('SELECT * FROM orders WHERE   customerId = $1', [customerId], (err, result) => {
         if (err) {
-            return res.status(500).json({ error: 'Erreur lors de la récupération des commandes du client' })+err;
+            console.log( 'repon de de '+res.message)
+            return res.status(500).json({ error: 'Erreur lors de la récupération des commandes du client' });
         }
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'aucun Commandes non trouvées pour ce client' });

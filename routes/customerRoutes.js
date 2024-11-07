@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/clientstel/:phone', customersControler.getCustomerByTel);
 router.get('/clients', customersControler.getAllCustomers);
 router.get('/clients/:id', customersControler.getCustomerById); 
-router.get('/commande_client/:id', customersControler.getOrderCustomer);//tous les comande client
+router.get('/commande_client/:id', customersControler.getOrderCustomerID);//tous les comande client
 router.get('/products_commande/:id', customersControler.getProductOrder);// tous les produit d un commande
 
 
