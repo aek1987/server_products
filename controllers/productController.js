@@ -13,15 +13,15 @@ export const getAllProducts = (req, res) => {
 
 // Ajouter un nouveau produit
 export const addProduct = (req, res) => {
-    const { name, description, price, image, category, resolution, storage, ram, battery, wirelessCharging, color, dualSim } = req.body;
+    const { name, description, price, image, category, ecran, processor, os,  storage, ram, battery, wirelessCharging, color, dualSim } = req.body;
     
     const query = `
         INSERT INTO products 
-        (name, description, price, image, category, resolution, storage, ram, battery, wirelessCharging, color, dualSim)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
+        (name, description, price, image, category, ecran,processor,os,storage, ram, battery, wirelessCharging, color, dualSim)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12 ,$13 ,$14) 
         RETURNING id, name, description, price, image, category;
     `;
-    const values = [name, description, price, image, category, resolution, storage, ram, battery, wirelessCharging, color, dualSim];
+    const values = [name, description, price, image, category, ecran, processor, os, storage, ram, battery, wirelessCharging, color, dualSim];
 
     db.query(query, values, (err, result) => {
         if (err) {
